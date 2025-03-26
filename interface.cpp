@@ -1,75 +1,177 @@
 #include <iostream>
+#include <string>
+#include <vector>
+#include <fstream>
+#include "Food.cpp"
+#include "inputHelp.h"
 using namespace std;
+
+#define endl '\n'
 class Interface{
-public:
-    void showMenu(){
-        // cout<<"1. Add a new simple food.\n";
-        // cout<<"2. Add a new complex food.\n";
-        // cout<<"3.View profile.\n";
-        // cout<<"4. Change profile.\n";
-        // cout<<"5. Add food to log.\n";
-        // cout<<"6. Delete food from log.\n";
-        // cout<<"7. Search food in keyboard.\n";
-        // cout<<"8. Get calorie status for today\n";
-        // cout<<"9. Undo\n";
-        cout<<"------------Select Section----------------\n";
-        cout<<"1. Add or search food\n";
-        cout<<"2. Profile\n";
-        cout<<"3. Daily log\n";
-        cout<<"4. Exit";
-        cout<<"What is your choice(1-4)?";
-        int n;
-        while(1){
-            cin>>n;
-            if(n>=1 && n<=4)break;
-            else cout<<"Please enter a valid choice(1-4)\n";
-        }
-        if(n == 1){
-            cout<<"1. Add a new simple food.\n";
-            cout<<"2. Add a new complex food.\n";
-            cout<<"3. Search food in keyboard.\n";
-            cout<<"4. Back\n";
-            int choice;
-            while(1){
-                cin>>choice;
-                if(choice>=1 && choice<=4)break;
-                else cout<<"Please enter a valid choice(1-4)\n";
+
+    vector<sfood> simpleFood;
+    vector<cfood> complexFood;
+    public:
+    Interface(){
+        ifstream fin("simpleFood.txt");
+        while(!fin.eof()){
+            int id;
+            string name;
+            float calories = -1;
+            int no_keywords = -1;
+            vector<string> keywords;
+            float servingSize = -1;
+            fin>>id>>name>>calories>>no_keywords;
+            for(int i=0;i<no_keywords;i++){
+                string s;
+                fin>>s;
+                keywords.push_back(s);
             }
-            if(choice == 1)
-            else if(choice == 2)
-            else if(choice == 3)
-            else if(choice == 4)
+            fin>>servingSize;
+            if(calories == -1 || servingSize == -1 || no_keywords == -1)break;
+            sfood f(id,name,calories,keywords,servingSize);
+            simpleFood.push_back(f);       
         }
-        else if(n == 2){
-            cout<<"1. View profile.\n";
-            cout<<"2. Change profile.\n";
-            cout<<"3. Back\n";
-            int choice;
-            while(1){
-                cin>>choice;
-                if(choice>=1 && choice<=3)break;
-                else cout<<"Please enter a valid choice(1-4):";
+        fin.close();
+        fin.open("complexFood.txt");
+        while(!fin.eof()){
+            int id;
+            string name;
+            float calories = -1;
+            int no_keywords = -1;
+            vector<string> keywords;
+            float servingSize = -1;
+            int no_ingredients;
+            vector<pair<sfood,int > > ingredients;
+            fin>>id>>name>>calories>>no_keywords;
+            for(int i=0;i<no_keywords;i++){
+                string s;
+                fin>>s;
+                keywords.push_back(s);
             }
-            if(choice == 1)
-            else if(choice == 2)
-            else if(choice == 3)
-        }
-        else if(n == 3){
-            cout<<"1. Add food to log.\n";
-            cout<<"2. Delete food from log.\n";
-            cout<<"3. Get calorie status for today\n";
-            cout<<"4. Undo\n";
-            cout<<"5. Back\n";
-        }
-        else if(n == 4){
-            cout<<"Are you sure you want to exit?(y/n)";
-            char c;
-            while(1){
-                cin>>c;
-                if(c == 'y' || c == 'n')break;
-                else cout<<"Please enter a valid choice(y/n)\n";
+            fin>>no_ingredients;
+            for(int i=0;i<no_ingredients;i++){
+                int id;
+                fin>>id;
+                int quantity;
+                fin>>quantity;
+                ingredients.push_back({simpleFood[id],quantity});
             }
-            if(c == 'y')exit(0);
+            if(calories == -1 || servingSize == -1 || no_keywords == -1)break;
+            cfood f(id,name,keywords,0,ingredients);
+            complexFood.push_back(f);
         }
+        fin.close();
+    }
+
+    void addSimpleFood(){
+        cout<<"Enter the name of the food:";
+        string name;
+        cin>>name;
+        cout<<"Enter the calories in the food:";
+        float calories = get_min_float(0);
+        cout<<"Enter the number of keywords:";
+        int n = get_min_choice(1);
+        vector<string> keywords;
+        cout<<"Enter the keywords:";
+        for(int i=0;i<n;i++){
+            string s;
+            cin>>s;
+            keywords.push_back(s);
+        }
+        cout<<"Enter the serving size:(in g)";
+        float servingSize = get_min_float(0);
+        sfood f(simpleFood.size(),name,calories,keywords,servingSize);
+        simpleFood.push_back(f);
+        askToSave();
+    }
+
+    void addComplexFood(){
+        cout<<"Enter the name of the food:";
+        string name;
+        cin>>name;
+        cout<<"Enter the number of keywords:";
+        int n = get_min_choice(1);
+        vector<string> keywords;
+        cout<<"Enter the keywords:";
+        for(int i=0;i<n;i++){
+            string s;
+            cin>>s;
+            keywords.push_back(s);
+        }
+        cout<<"Enter the number of ingredients:";
+        int m = get_min_choice(1);
+        vector<pair<sfood,int> > ingredients;
+        for(int i=0;i<m;i++){
+            cout<<"Enter the id of the simple food:";
+            int id = get_choice(0,simpleFood.size()-1);
+            cout<<"Enter the quantity of the food:";
+            int quantity = get_min_choice(1);
+            ingredients.push_back({simpleFood[id],quantity});
+        }
+        cfood f(complexFood.size(),name,keywords,0,ingredients);
+        complexFood.push_back(f);
+        askToSave();
+    }
+
+    void searchFood(){
+        cout<<"How many keywords do you want to search for?";
+        int n = get_min_choice(1);
+        vector<string> keywords;
+        cout<<"Enter the keywords:\n";
+        for(int i=0;i<n;i++){
+            string s;
+            cin>>s;
+            keywords.push_back(s);
+        }
+        cout<<"------------Simple foods----------------\n";
+        for(auto i: simpleFood){
+            for(auto j: i.keywords){
+                bool found = false;
+                for(auto k: keywords){
+                    if(j == k){
+                        i.print();
+                        found = true;
+                        break;
+                    }
+                }
+                if(found)break;
+            }
+        }
+        cout<<"------------Complex foods----------------\n";
+        for(auto i: complexFood){
+            for(auto j: i.keywords){
+                bool found = false;
+                for(auto k: keywords){
+                    if(j == k){
+                        i.printc();
+                        found = true;
+                        break;
+                    }
+                }
+                if(found)break;
+            }
+        }
+    }
+
+    void askToSave(){
+        cout<<"Would you like to save your data?(yes/no)";
+        bool c = get_yes_no();
+        if(c)saveData();
+    }
+
+    void saveData(){
+        ofstream fout("simpleFood.txt");
+        for(auto i: simpleFood){
+            i.print();
+            i.writeToFile(fout);
+        }
+        fout.close();
+        fout.open("complexFood.txt");
+        for(auto i: complexFood){
+            i.printc();
+            i.writeToFilec(fout);
+        }
+        fout.close();
     }
 };
