@@ -33,8 +33,8 @@ signed main(){
             cout<<"3. Back\n";
             cout<<"What is your choice(1-3)? ";
             int choice = get_choice(1, 3);
-            if(choice == 1);
-            else if(choice == 2);
+            if(choice == 1)i.p.print();
+            else if(choice == 2)i.modifyProfile();
             else if(choice == 3)continue;
         }
         else if(n == 3){

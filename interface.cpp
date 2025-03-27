@@ -4,6 +4,7 @@
 #include <fstream>
 #include "Food.cpp"
 #include "inputHelp.h"
+#include "profile.cpp"
 using namespace std;
 
 #define endl '\n'
@@ -12,6 +13,7 @@ class Interface{
     vector<sfood> simpleFood;
     vector<cfood> complexFood;
     public:
+    Profile p;
     Interface(){
         ifstream fin("simpleFood.txt");
         while(!fin.eof()){
@@ -171,5 +173,22 @@ class Interface{
             i.writeToFilec(fout);
         }
         fout.close();
+    }
+
+    void modifyProfile(){
+        cout<<"Enter the new age: (0 if you don't want to change)";
+        float age = get_min_float(0);
+        cout<<"Enter the new weight:(0 if you don't want to change)";
+        float weight = get_min_float(0);
+        cout << "Activity Levels:" << endl;
+        cout << "1 - SEDENTARY" << endl;
+        cout << "2 - LIGHTLY_ACTIVE" << endl;
+        cout << "3 - MODERATELY_ACTIVE" << endl;
+        cout << "4 - DAILY_ACTIVE" << endl;
+        cout << "5 - INTENSE_ACTIVE" << endl;
+        cout<<"Enter the new activity level(1-5)(0 if you don't want to change):";
+        int activityLevel = get_choice(1,5);
+        p.modify(age,weight,activityLevel);
+        askToSave();
     }
 };
