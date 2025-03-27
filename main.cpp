@@ -18,7 +18,7 @@ signed main(){
         if(n == 1){
             cout<<"1. Add a new simple food.\n";
             cout<<"2. Add a new complex food.\n";
-            cout<<"3. Search food in keyboard.\n";
+            cout<<"3. Search food using keywords.\n";
             cout<<"4. Back\n";
             cout<<"What is your choice(1-4)?";
             int choice = get_choice(1, 4);

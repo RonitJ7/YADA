@@ -1,0 +1,2 @@
+0 Cheese 230 2 Dairy Fatty 5.3
+1 Patty 58.2 2 Yeast Carbs 25

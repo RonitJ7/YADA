@@ -45,7 +45,7 @@ class cfood: public sfood{
         this->no_ingredients = ingredients.size();
         this->ingredients = ingredients;
         for(auto i:ingredients){
-            this->calories += i.first.calories;
+            this->calories += i.first.calories * i.second;
         }
     }
     void printc(){
@@ -53,7 +53,7 @@ class cfood: public sfood{
         cout<<"Name:"<<name<<endl;
         cout<<"Calories:"<<calories<<endl;
         cout<<"Serving size:"<<servingSize<<endl;
-        cout<<"Ingredients:"<<endl;
+        cout<<"\nIngredients:"<<"\n\n";
         for(auto i:ingredients){
             i.first.print();
             cout<<"Quantity:"<<i.second<<endl;

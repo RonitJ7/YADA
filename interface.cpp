@@ -163,13 +163,11 @@ class Interface{
     void saveData(){
         ofstream fout("simpleFood.txt");
         for(auto i: simpleFood){
-            i.print();
             i.writeToFile(fout);
         }
         fout.close();
         fout.open("complexFood.txt");
         for(auto i: complexFood){
-            i.printc();
             i.writeToFilec(fout);
         }
         fout.close();
