@@ -175,12 +175,13 @@ class Interface{
         fout.close();
         fout.open("Profile.txt");
         p.putFile(fout);
+        fout.close();
     }
 
     void modifyProfile(){
         cout<<"Enter the new age: (0 if you don't want to change)";
         float age = get_min_float(0);
-        cout<<"Enter the new weight:(0 if you don't want to change)";
+        cout<<"Enter the new weight(kg):(0 if you don't want to change)";
         float weight = get_min_float(0);
         cout << "Activity Levels:" << endl;
         cout << "1 - SEDENTARY" << endl;
@@ -189,8 +190,13 @@ class Interface{
         cout << "4 - DAILY_ACTIVE" << endl;
         cout << "5 - INTENSE_ACTIVE" << endl;
         cout<<"Enter the new activity level(1-5)(0 if you don't want to change):";
-        int activityLevel = get_choice(1,5);
-        p.modify(age,weight,activityLevel);
+        int activityLevel = get_choice(0,5);
+        cout<<"Calorie Calculation methods:\n";
+        cout<<"1. Mifflin-St Jeor\n";
+        cout<<"2. Harris-Benedict\n";
+        cout<<"Enter the new calculation method(0 if you don't want to change):";
+        int calcMethod = get_choice(0,2);
+        p.modify(age,weight,activityLevel,calcMethod);
         askToSave();
     }
 };
