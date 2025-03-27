@@ -26,6 +26,7 @@ class Profile{
         ifstream fin("Profile.txt");
         fin>>female>>height>>age>>weight>>alevel;
         fin.close();
+        // cout<<female<<" "<<height<<" "<<age<<" "<<weight<<" "<<alevel<<'\n';
         this->female = female;
         this->age = age;
         this->height = height;
@@ -49,5 +50,8 @@ class Profile{
             case DAILY_ACTIVE:cout<<"Daily active\n";break;
             case INTENSE_ACTIVE:cout<<"Intense active\n";break;
         }
+    }
+    void putFile(ofstream& fout){
+        fout<<female<<" "<<height<<" "<<age<<" "<<weight<<" "<<level<<'\n';
     }
 };

@@ -173,6 +173,8 @@ class Interface{
             i.writeToFilec(fout);
         }
         fout.close();
+        fout.open("Profile.txt");
+        p.putFile(fout);
     }
 
     void modifyProfile(){
