@@ -28,6 +28,6 @@ Eg: Date: <date>
 
 6. The command changes will be initially pushed to the buffer , and will be visible onto the daily log file only when the user explicitly chooses to save changes made till now or user ends the session normally.
 
-7. The buffer will be a map with key-value pairs with the keys being the dates and the values being the vector of logs.
+7. The buffer will be a map with key-value pairs with the keys being the dates and the values being the vector of logs / just a vector of object instances of Daily Log class , where each instance corresponds to a differnt date.
 
 8. Both the reverse and the usual commands will be stored as function pointers in an array.
