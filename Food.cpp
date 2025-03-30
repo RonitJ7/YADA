@@ -8,6 +8,10 @@ using namespace std;
 
 class sfood{
     public:
+    enum {
+        SIMPLE,
+        COMPLEX
+    }type;
     int id;
     string name;
     float calories;
@@ -22,6 +26,7 @@ class sfood{
         this->no_keywords = keywords.size();
         this->keywords = keywords;
         this->servingSize = servingSize;
+        this->type = SIMPLE;
     }
     void print(){
         cout<<"ID:"<<id<<'\n';
@@ -47,6 +52,7 @@ class cfood: public sfood{
         for(auto i:ingredients){
             this->calories += i.first.calories * i.second;
         }
+        this->type = COMPLEX;
     }
     void printc(){
         cout<<"ID:"<<id<<'\n';
