@@ -25,7 +25,7 @@ bool is_1_disj_2(vector<string> a , vector<string> b)
 
 
 
-pair<vector<sfood> , vector<cfood>> search(bool view_all, vector<string>& keywords, bool any_key, vector<sfood>& simpleFood, vector<cfood>& complexFood)
+pair<vector<sfood> , vector<cfood>> search_key_food(bool view_all, vector<string>& keywords, bool any_key, vector<sfood>& simpleFood, vector<cfood>& complexFood)
 {
     vector<sfood> result_s;
     vector<cfood> result_c;
