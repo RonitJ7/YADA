@@ -1,5 +1,5 @@
 Functionalities Overview:
-1. Stores the foods consumed by the user datewise. Addition is simply by selecting the complex food and specifying servings.
+1. Stores the foods consumed by the user datewise. Addition is simply by selecting the complex/simple food and specifying servings.
 2. User must be able to search through the daily logs via keywords (all and any both). Can also choose to view the whole list of foods.
 3. User must be able to delete foods from the log.
 4. On top of that user can be able to change a particular food log (no of servings , if entered incorrectly.)
@@ -8,7 +8,7 @@ Functionalities Overview:
 
 Implementation Design:
 -Daily Logs and Undo Commands: 
-1. On one line there will be the date written in the following way : 'Date: <DD/MM/YYYY>'
+1. On one line there will be the date written in the following way : '<<Date>>: <YYYY-MM-DD>'
 
 2. Starting from the new line there will be the logs . After the last log there will be two new lines , and the new date will start from the third.
 Eg: Date: <date>
@@ -20,7 +20,7 @@ Eg: Date: <date>
 
     Date: <new_date>
 
-3. Logs will be of the format <Food_Name | Servings | Calories_intake>
+3. Logs will be of the format <Food_Name | Servings | Calories_intake |>
 
 4. Undo commands will be implemented by pushing the reverse command of the command which made changes to the system by pushing onto the undo stack.
 
@@ -31,3 +31,5 @@ Eg: Date: <date>
 7. The buffer will be a map with key-value pairs with the keys being the dates and the values being the vector of logs / just a vector of object instances of Daily Log class , where each instance corresponds to a differnt date.
 
 8. Both the reverse and the usual commands will be stored as function pointers in an array.
+
+9. For each daily log there will be a new file. That file will be located in the Logs directory.
