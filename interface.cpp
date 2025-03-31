@@ -2,19 +2,32 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "Food.cpp"
+#include <cstdio>
+#include <map>
+#include "Food.h"
 #include "inputHelp.h"
-#include "profile.cpp"
+#include "profile.h"
+#include "DailyLog.h"
+#include "utility.h"
+#include "Search.h"
+
 using namespace std;
 
 #define endl '\n'
 class Interface{
 
-    vector<sfood> simpleFood;
-    vector<cfood> complexFood;
+    // Changes start
+    map<string, DailyLog> dailyLogs;
+    map<string , int> updates;
+    map<string , bool> deleteFile;
+
     public:
     Profile p;
+    vector<sfood> simpleFood;
+    vector<cfood> complexFood;
+    string latest_date;
     Interface(){
+        
         ifstream fin("simpleFood.txt");
         while(!fin.eof()){
             int id;
@@ -64,6 +77,34 @@ class Interface{
             complexFood.push_back(f);
         }
         fin.close();
+        // Read from Daily Logs
+        fin.open(LOGFILE);
+        while(!fin.eof()){
+            string date;
+            getline(fin,date);
+            get_date(date);
+            vector<log_t> logs;
+            ifstream fin2("./Logs/" + date + ".txt");
+            while(!fin2.eof()){
+                string log_str;
+                getline(fin2,log_str);
+                if(log_str == "")break;
+                log_t log = get_logs(log_str);
+                logs.push_back(log);
+            }
+            fin2.close();
+            DailyLog d(date,logs);
+            dailyLogs[date] = d;
+            latest_date = date;
+        }
+        fin.close();
+    }
+    vector<sfood> getSimpleFood(){
+        return this->simpleFood;
+    }
+
+    vector<cfood> getComplexFood(){
+        return this->complexFood;
     }
 
     void addSimpleFood(){
@@ -198,5 +239,98 @@ class Interface{
         int calcMethod = get_choice(0,2);
         p.modify(age,weight,activityLevel,calcMethod);
         askToSave();
+    }
+
+    DailyLog* get_inst(string date)
+    {
+        if(dailyLogs.find(date) == dailyLogs.end()){
+            return NULL ;
+        }
+        return &(dailyLogs[date]);
+    }
+    
+    void addToDailyLog(string date , string name , int servings , float calories){
+        if(dailyLogs.find(date) == dailyLogs.end()){
+            vector<log_t> logs;
+            logs.push_back({name , {servings , calories}});
+            DailyLog d(date,logs);
+            dailyLogs[date] = d;
+            if(latest_date < date){
+                latest_date = date;
+            }
+            updates[date] += 1;
+            deleteFile[date] = false;
+            return;
+        }
+        DailyLog* d = get_inst(date);
+        log_t log = {name , {servings , calories}};
+        d->addLog(log);
+        updates[date] += 1;
+        return;
+    }
+
+    void DeleteFromDailyLog(string date , string name){
+        DailyLog* d = get_inst(date);
+        if(d == NULL){
+            cout<<"No logs found for the date "<<date<<endl;
+            return;
+        }
+        int ret = d->deletefromLog(name);
+        if(ret == -1)
+        {
+            cout<<"No info found for the food "<<name<<endl;
+            return;
+        }
+        if(ret == 0){
+            deleteFile[date] = true;
+            dailyLogs.erase(date);
+            updates[date] += 1;
+            return;
+        }
+        updates[date] += 1;
+        return;
+    }
+
+    void viewDailyLog(string date){
+        DailyLog* d = get_inst(date);
+        if(d == NULL){
+            cout<<"No logs found for the date "<<date<<endl;
+            return;
+        }
+        d->viewLogs();
+    }
+
+    void getCalories(string date){
+        DailyLog* d = get_inst(date);
+        float cal = 0.0f;
+        if(d == NULL){
+            cout<<"No logs found for the date "<<date<<endl;
+            return;
+        }
+        for(auto i: d->logs){
+            cal += i.second.second;
+        }
+        cout<<"Total calories consumed on "<<date<<" are "<<cal<<endl;
+    }
+
+    void updatelog(string date , string oldname , string newname , int servings , float calories){
+        
+        log_t newlog = {newname , {servings , calories}};
+        DailyLog* d = get_inst(date);
+        if(d == NULL){
+            cout<<"No logs found for the date "<<date<<endl;
+            return;
+        }
+        int ret = d->updateLog(oldname , newlog);
+        if(ret == -1){
+            cout<<"No info found for the food "<<oldname<<endl;
+            return;
+        }
+        updates[date] += 1;
+        return;
+    }
+
+    void undo(){
+
     }
 };

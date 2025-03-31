@@ -65,3 +65,13 @@ bool get_yes_no() {
 
     }
 }
+
+int get_search_key_pref() {
+    cout << "Search by:\n";
+    cout << "1. All keywords\n";
+    cout << "2. Any keyword\n";
+    cout << "3. View All\n";
+    cout << "Enter your choice (1-3): ";
+    int choice = get_choice(1, 3);
+    return choice;
+}
