@@ -4,31 +4,21 @@
 #include <fstream>
 #include <cstdio>
 #include <map>
+#include <filesystem>
 #include "Food.h"
 #include "inputHelp.h"
 #include "profile.h"
 #include "DailyLog.h"
 #include "utility.h"
 #include "Search.h"
+#include "interface.h"
 
 using namespace std;
 
-#define endl '\n'
-class Interface{
-
-    // Changes start
-    map<string, DailyLog> dailyLogs;
-    map<string , int> updates;
-    map<string , bool> deleteFile;
-
-    public:
-    Profile p;
-    vector<sfood> simpleFood;
-    vector<cfood> complexFood;
-    string latest_date;
-    Interface(){
+    Interface:: Interface(){
         
         ifstream fin("simpleFood.txt");
+        string line;
         while(!fin.eof()){
             int id;
             string name;
@@ -47,6 +37,7 @@ class Interface{
             sfood f(id,name,calories,keywords,servingSize);
             simpleFood.push_back(f);       
         }
+        // cout << "Simple food done" << endl;
         fin.close();
         fin.open("complexFood.txt");
         while(!fin.eof()){
@@ -76,13 +67,13 @@ class Interface{
             cfood f(id,name,keywords,0,ingredients);
             complexFood.push_back(f);
         }
+        // cout << "Complex food done" << endl;
         fin.close();
         // Read from Daily Logs
         fin.open(LOGFILE);
-        while(!fin.eof()){
+        while(getline(fin, line)){
             string date;
-            getline(fin,date);
-            get_date(date);
+            date = line;
             vector<log_t> logs;
             ifstream fin2("./Logs/" + date + ".txt");
             while(!fin2.eof()){
@@ -93,21 +84,25 @@ class Interface{
                 logs.push_back(log);
             }
             fin2.close();
-            DailyLog d(date,logs);
-            dailyLogs[date] = d;
-            latest_date = date;
+            dailyLogs.emplace(date, DailyLog(date, logs));
+            deleteFile[date] = false;
+            updates[date] = 0;
         }
+        // cout << "Logs done" << endl;
         fin.close();
+        remove(LOGFILE);
+        ofstream fout(LOGFILE);
+        fout.close();
     }
-    vector<sfood> getSimpleFood(){
+    vector<sfood> Interface:: getSimpleFood(){
         return this->simpleFood;
     }
 
-    vector<cfood> getComplexFood(){
+    vector<cfood> Interface:: getComplexFood(){
         return this->complexFood;
     }
 
-    void addSimpleFood(){
+    void Interface:: addSimpleFood(){
         cout<<"Enter the name of the food:";
         string name;
         cin>>name;
@@ -129,7 +124,7 @@ class Interface{
         askToSave();
     }
 
-    void addComplexFood(){
+    void Interface:: addComplexFood(){
         cout<<"Enter the name of the food:";
         string name;
         cin>>name;
@@ -157,7 +152,7 @@ class Interface{
         askToSave();
     }
 
-    void searchFood(){
+    void Interface:: searchFood(){
         cout<<"How many keywords do you want to search for?";
         int n = get_min_choice(1);
         vector<string> keywords;
@@ -197,13 +192,13 @@ class Interface{
         }
     }
 
-    void askToSave(){
+    void Interface:: askToSave(){
         cout<<"Would you like to save your data?(yes/no)";
         bool c = get_yes_no();
         if(c)saveData();
     }
 
-    void saveData(){
+    void Interface:: saveData(){
         ofstream fout("simpleFood.txt");
         for(auto i: simpleFood){
             i.writeToFile(fout);
@@ -217,9 +212,50 @@ class Interface{
         fout.open("Profile.txt");
         p.putFile(fout);
         fout.close();
+        // Save the daily logs
+
+        fout.open(LOGFILE);
+        for(auto& dates : dailyLogs)
+        {
+            string date = dates.first;
+            DailyLog& d = dates.second;
+            if(deleteFile[date] == true){
+                continue;
+            }
+            fout<<date<<endl;
+            if(updates[date] == 0 ){
+                continue;
+            }
+            if(filesystem::exists("./Logs/" + date + ".txt"))
+                remove(("./Logs/" + date + ".txt").c_str());
+            ofstream fout1("./Logs/" + date + ".txt");
+            for(auto i: d.logs){
+                fout1<<i.first<<" | "<<i.second.first<<" | "<<i.second.second<<endl;
+            }
+            fout1.close();
+            
+        }
+        fout.close();
+        for(auto& dates: deleteFile)
+        {
+            string date = dates.first;
+            if(dates.second == true){
+                if(filesystem::exists("./Logs/" + date + ".txt"))
+                    remove(("./Logs/" + date + ".txt").c_str());
+                }
+        }
+        // reset the updates and deletes
+        for(auto& dates: updates)
+        {
+            dates.second = 0;
+        }
+        for(auto& dates: deleteFile)
+        {
+            dates.second = false;
+        }
     }
 
-    void modifyProfile(){
+    void Interface:: modifyProfile(){
         cout<<"Enter the new age: (0 if you don't want to change)";
         float age = get_min_float(0);
         cout<<"Enter the new weight(kg):(0 if you don't want to change)";
@@ -241,46 +277,53 @@ class Interface{
         askToSave();
     }
 
-    DailyLog* get_inst(string date)
+    DailyLog* Interface:: get_inst(string date)
     {
-        if(dailyLogs.find(date) == dailyLogs.end()){
+        auto it = dailyLogs.find(date);
+        if(it == dailyLogs.end()){
             return NULL ;
         }
-        return &(dailyLogs[date]);
+        return &it->second;
     }
     
-    void addToDailyLog(string date , string name , int servings , float calories){
+    void Interface:: addToDailyLog(string date , string name , int servings , float calories){
         if(dailyLogs.find(date) == dailyLogs.end()){
             vector<log_t> logs;
             logs.push_back({name , {servings , calories}});
-            DailyLog d(date,logs);
-            dailyLogs[date] = d;
-            if(latest_date < date){
-                latest_date = date;
-            }
+            dailyLogs.emplace(date, DailyLog(date, logs));
             updates[date] += 1;
             deleteFile[date] = false;
+            // Add this to undo_stack
+            Reverse r(date , name , servings , calories , 'a');
+            undostack.push_back(r);
             return;
         }
         DailyLog* d = get_inst(date);
         log_t log = {name , {servings , calories}};
         d->addLog(log);
         updates[date] += 1;
+        // Add this to undo_stack
+        Reverse r(date , name , servings , calories , 'a');
+        undostack.push_back(r);
         return;
     }
 
-    void DeleteFromDailyLog(string date , string name){
+    void Interface:: DeleteFromDailyLog(string date , string name){
         DailyLog* d = get_inst(date);
         if(d == NULL){
             cout<<"No logs found for the date "<<date<<endl;
             return;
         }
-        int ret = d->deletefromLog(name);
+        int servings;
+        float calories;
+        int ret = d->deletefromLog(name , servings , calories);
         if(ret == -1)
         {
             cout<<"No info found for the food "<<name<<endl;
             return;
         }
+        Reverse r(date , name , servings , calories , 'd');
+        undostack.push_back(r);
         if(ret == 0){
             deleteFile[date] = true;
             dailyLogs.erase(date);
@@ -291,7 +334,7 @@ class Interface{
         return;
     }
 
-    void viewDailyLog(string date){
+    void Interface:: viewDailyLog(string date){
         DailyLog* d = get_inst(date);
         if(d == NULL){
             cout<<"No logs found for the date "<<date<<endl;
@@ -300,7 +343,7 @@ class Interface{
         d->viewLogs();
     }
 
-    void getCalories(string date){
+    void Interface:: getCalories(string date){
         DailyLog* d = get_inst(date);
         float cal = 0.0f;
         if(d == NULL){
@@ -313,7 +356,7 @@ class Interface{
         cout<<"Total calories consumed on "<<date<<" are "<<cal<<endl;
     }
 
-    void updatelog(string date , string oldname , string newname , int servings , float calories){
+    void Interface:: updatelog(string date , string oldname , string newname , int servings , float calories){
         
         log_t newlog = {newname , {servings , calories}};
         DailyLog* d = get_inst(date);
@@ -321,16 +364,88 @@ class Interface{
             cout<<"No logs found for the date "<<date<<endl;
             return;
         }
-        int ret = d->updateLog(oldname , newlog);
+        int servings_old;
+        float calories_old;
+        int ret = d->updateLog(oldname , newlog , servings_old , calories_old);
         if(ret == -1){
-            cout<<"No info found for the food "<<oldname<<endl;
+            cout<<"No information has been logged for the food "<<oldname<<endl;
             return;
         }
+        Reverse r(date , newname , oldname , servings_old , calories_old);
+        undostack.push_back(r);
         updates[date] += 1;
         return;
     }
 
-    void undo(){
-
+    void Interface :: undo(){
+        if(undostack.size() == 0){
+            cout<<"Nothing to undo\n";
+            return;
+        }
+        // cout << "Size:" << undostack.size() << endl;
+        Reverse r = undostack.back();
+        undostack.pop_back();
+        // cout << (r.optype) << endl;
+        if (r.optype == Reverse::ADD){
+            string date = r.params[0];
+            string name = r.params[1];
+            int servings = stoi(r.params[2]);
+            float calories = stof(r.params[3]);
+            add_r(date , name , servings , calories);
+        }
+        else if (r.optype == Reverse::DELETE){
+            string date = r.params[0];
+            string name = r.params[1];
+            int servings = stoi(r.params[2]);
+            float calories = stof(r.params[3]);
+            delete_r(date , name , servings , calories);
+        }
+        else if (r.optype == Reverse::UPDATE){
+            string date = r.params[0];
+            string oldname = r.params[1];
+            string newname = r.params[2];
+            int servings = stoi(r.params[3]);
+            float calories = stof(r.params[4]);
+            update_r(date , oldname , newname , servings , calories);
+        }
+        return ;
     }
-};
+
+    void Interface:: update_r(string date , string oldname , string newname , int servings , float calories){
+        log_t newlog = {newname , {servings , calories}};
+        DailyLog* d = get_inst(date);
+        int servings_old;
+        float calories_old;
+        int ret = d->updateLog(oldname , newlog , servings_old , calories_old);
+        updates[date] -= 1;
+        return ;
+    }
+    void Interface:: delete_r(string date , string name , int servings , float calories){
+        DailyLog* d = get_inst(date);
+        if(d == NULL){
+            vector<log_t> logs;
+            logs.push_back({name , {servings , calories}});
+            dailyLogs.emplace(date, DailyLog(date, logs));
+            updates[date] -= 1;
+            deleteFile[date] = false;
+            return;
+        }
+        log_t log = {name , {servings , calories}};
+        d->addLog(log);
+        updates[date] -= 1;
+        return;
+    }
+    void Interface:: add_r(string date , string name , int servings , float calories){
+        DailyLog* d = get_inst(date);
+        int num1;
+        float num2;
+        int ret = d->deletefromLog(name , num1 , num2);
+        if(ret == 0){
+            deleteFile[date] = true;
+            dailyLogs.erase(date);
+            updates[date] -= 1;
+            return;
+        }
+        updates[date] -= 1;
+        return;
+    }

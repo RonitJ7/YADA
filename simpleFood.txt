@@ -1,2 +1,4 @@
 0 Cheese 230 2 Dairy Fatty 5.3
 1 Patty 58.2 2 Yeast Carbs 25
+2 Butter 4.82 3 Fatty Dairy Gluton 20
+3 Bread 100.5 2 Carbs Fibre 25

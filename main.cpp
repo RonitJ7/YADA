@@ -54,19 +54,26 @@ signed main()
         else if (n == 3)
         {
             string date = "", name = "";
-            bool right = false;
+            // bool right = false;
             float calories = 0.0f;
             cout << "1. Add food to log.\n";
             cout << "2. Delete food from log.\n";
-            cout << "3. Get calorie status for today\n";
+            cout << "3. Get calorie status for any day\n";
             cout << "4. Search for food using keywords.\n";
-            cout << "5. Back\n";
-            cout << "What is your choice(1-5)? ";
-            int choice = get_choice(1, 5);
+            cout << "5. View daily log.\n";
+            cout << "6. Update Logs.\n";
+            cout << "7. Undo Changes.\n";
+            cout << "8. Back\n";
+            cout << "What is your choice(1-8)? ";
+            int choice = get_choice(1, 8);
             if (choice == 1)
             {
-                cout << "Enter the date(DD-MM-YYYY) Leave blank if logs are wanted for the current day:";
+                cout << "Enter the date(DD-MM-YYYY) \n(Enter the string \"today\" for current day):";
                 cin >> date;
+                if (date == "today")
+                {
+                    date = get_current_date();
+                }
                 cout << "Enter the name of the food:";
                 string name;
                 cin >> name;
@@ -83,9 +90,13 @@ signed main()
             }
             else if (choice == 2)
             {
-                cout << "Enter the date(DD-MM-YYYY):";
+                cout << "Enter the date(DD-MM-YYYY)\n(Enter the string \"today\" for current day):";
                 string date;
                 cin >> date;
+                if (date == "today")
+                {
+                    date = get_current_date();
+                }
                 cout << "Enter the name of the food:";
                 string name;
                 cin >> name;
@@ -93,10 +104,14 @@ signed main()
             }
             else if (choice == 3)
             {
-                cout << "Enter the date(DD-MM-YYYY):";
+                cout << "Enter the date(DD-MM-YYYY)\n(Enter the string \"today\" for current day):";
                 string date;
                 cin >> date;
-                inter.viewDailyLog(date);
+                if (date == "today")
+                {
+                    date = get_current_date();
+                }
+                inter.getCalories(date);
             }
             else if (choice == 4)
             {
@@ -117,7 +132,8 @@ signed main()
                     any_key = true;
                 else if (keypref == 3)
                     view_all = true;
-                else;
+                else
+                    ;
                 pair<vector<sfood>, vector<cfood>> result = search_key_food(view_all, keywords, any_key, inter.simpleFood, inter.complexFood);
 
                 vector<sfood> simpleResult = result.first;
@@ -128,19 +144,59 @@ signed main()
                 {
                     i.print();
                 }
-                if(simpleResult.size() == 0)
+                if (simpleResult.size() == 0)
                     cout << "No simple food found with the given keywords.\n";
-                
+
                 cout << "------------Complex foods----------------\n";
                 for (auto i : complexResult)
                 {
                     i.printc();
                 }
-                if(complexResult.size() == 0)
+                if (complexResult.size() == 0)
                     cout << "No complex food found with the given keywords.\n";
                 cout << "------------------------------------------\n";
             }
             else if (choice == 5)
+            {
+                cout << "Enter the date(DD-MM-YYYY)\n(Enter the string \"today\" for current day):";
+                string date;
+                cin >> date;
+                if (date == "today")
+                {
+                    date = get_current_date();
+                }
+                inter.viewDailyLog(date);
+            }
+            else if (choice == 6)
+            {
+                cout << "Enter the date(DD-MM-YYYY) you would like to change the logs for.\n(Enter the string \"today\" for current day):";
+                string date;
+                cin >> date;
+                if (date == "today")
+                {
+                    date = get_current_date();
+                }
+                cout << "Enter the name of the food whose log you would like to alter:";
+                string name;
+                cin >> name;
+                cout << "Enter the new name of the food (if any changes , else type \"none\"):";
+                string newname;
+                cin >> newname;
+                if (newname == "none")
+                    newname = name;
+                calories = getfoodbyname(newname, inter.simpleFood, inter.complexFood);
+                if (calories == -1)
+                {
+                    cout << "No food found with the name " << newname << endl;
+                    continue;
+                }
+                cout << "Enter the number of servings:";
+                int servings = get_min_choice(1);
+                inter.updatelog(date, name, newname, servings, calories);
+            }
+            else if (choice == 7)
+                inter.undo();
+            else if (choice == 8)
                 continue;
         }
         else if (n == 4)
@@ -150,6 +206,10 @@ signed main()
             if (texit)
             {
                 inter.saveData();
+                cout << "Saving Data...\n";
+                cout << "Data saved successfully.\n";
+                cout << "Exiting...\n";
+                cout << "Goodbye!\n";
                 exit(0);
             }
         }

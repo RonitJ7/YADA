@@ -19,11 +19,11 @@ class DailyLog{
 
     vector<pair<string , pair<int , float>>> logs;
     // {{Name , {Serving size , Calories}}
-    DailyLog(string date ,  vector<pair<string , pair<int , float>>> logs);
+    DailyLog(string date ,  vector<pair<string , pair<int , float>>>logs_inp);
     void addLog(log_t log);
-    int deletefromLog(string name);
+    int deletefromLog(string name , int& servings , float& calories);
     void viewLogs();
-    int updateLog(string oldname, log_t newlog);
+    int updateLog(string oldname, log_t newlog , int& servings , float& calories);
 };
 
 #endif

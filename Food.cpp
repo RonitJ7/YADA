@@ -2,24 +2,13 @@
 #include <string>
 #include <vector>
 #include <fstream>
-
+#include "Food.h"
 #define endl '\n'
 using namespace std;
 
-class sfood{
-    public:
-    enum {
-        SIMPLE,
-        COMPLEX
-    }type;
-    int id;
-    string name;
-    float calories;
-    int no_keywords;
-    vector<string> keywords;
-    float servingSize;
 
-    sfood(int id,string name, float calories, vector<string> keywords, float servingSize){
+
+    sfood:: sfood(int id,string name, float calories, vector<string> keywords, float servingSize){
         this->id = id;
         this->name = name;
         this->calories = calories;
@@ -28,25 +17,21 @@ class sfood{
         this->servingSize = servingSize;
         this->type = SIMPLE;
     }
-    void print(){
+    void sfood:: print(){
         cout<<"ID:"<<id<<'\n';
         cout<<"Name:"<<name<<endl;
         cout<<"Calories:"<<calories<<endl;
         cout<<"Serving size:"<<servingSize<<"\n\n";
     }
-    void writeToFile(ofstream &fout){
+    void sfood:: writeToFile(ofstream &fout){
         fout<<id<<' '<<name<<' '<<calories<<' '<<no_keywords<<' ';
         for(auto i:keywords){
             fout<<i<<' ';
         }
         fout<<servingSize<<'\n';
     }
-};
-class cfood: public sfood{
-    public:
-    int no_ingredients;
-    vector<pair<sfood,int> > ingredients;
-    cfood(int id, string name, vector<string> keywords, float servingSize, vector<pair<sfood,int> > ingredients):sfood(id,name,0,keywords,servingSize){
+
+    cfood:: cfood(int id, string name, vector<string> keywords, float servingSize, vector<pair<sfood,int> > ingredients):sfood(id,name,0,keywords,servingSize){
         this->no_ingredients = ingredients.size();
         this->ingredients = ingredients;
         for(auto i:ingredients){
@@ -54,7 +39,7 @@ class cfood: public sfood{
         }
         this->type = COMPLEX;
     }
-    void printc(){
+    void cfood:: printc(){
         cout<<"ID:"<<id<<'\n';
         cout<<"Name:"<<name<<endl;
         cout<<"Calories:"<<calories<<endl;
@@ -66,7 +51,7 @@ class cfood: public sfood{
         }
         cout<<'\n';
     }
-    void writeToFilec(ofstream &fout){
+    void cfood:: writeToFilec(ofstream &fout){
         fout<<id<<' '<<name<<' '<<calories<<' '<<no_keywords<<' ';
         for(auto i:keywords){
             fout<<i<<' ';
@@ -78,4 +63,3 @@ class cfood: public sfood{
         fout<<servingSize<<'\n';
         fout<<'\n';
     }
-};

@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include <set>
-#include "Food.cpp"
+#include "Food.h"
 
 using namespace std;
 

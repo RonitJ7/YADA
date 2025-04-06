@@ -1,29 +1,22 @@
 #include <iostream>
+
 #include <string>
 #include <vector>
 #include <fstream>
 #include "Food.h"
 #include "Search.h"
 #include "DailyLog.h"
-
-#define endl '\n'
-#define LOGFILE "log.txt"
+#include "Reverse.h"
 using namespace std;
 
-typedef pair<string , pair<int , float>> log_t;
 
-class DailyLog{
-    public:
-    string date;
-
-    vector<pair<string , pair<int , float>>> logs;
     // {{Name , {Serving size , Calories}}
-    DailyLog(string date ,  vector<pair<string , pair<int , float>>> logs){
+    DailyLog:: DailyLog(string date ,  vector<pair<string , pair<int , float>>>logs_inp){
         this->date = date;
-        this->logs = logs;
+        this->logs = logs_inp;
     }
     
-    void addLog(log_t log){
+    void DailyLog:: addLog(log_t log){
         for(auto it = this->logs.begin(); it != this->logs.end(); it++){
             if(it->first == log.first){
                 it->second.first += log.second.first;
@@ -36,11 +29,11 @@ class DailyLog{
         
     }
 
-    int deletefromLog(string name){
+    int DailyLog:: deletefromLog(string name , int& servings , float& calories){
         // Check if name exists
         bool exists = false;
         auto it = this->logs.begin();
-        for(it ; it != this->logs.end(); it++){
+        for(; it != this->logs.end(); it++){
             if(it->first == name){
                 exists = true;
                 break;
@@ -49,8 +42,9 @@ class DailyLog{
         if(!exists){
             return -1;
         }
+        servings = it->second.first;
+        calories = it->second.second;
         if(this->logs.size() == 1){
-            // Save it onto the undo stack before deleting
             this->logs.clear();
             return 0;
         }
@@ -59,7 +53,7 @@ class DailyLog{
         return 1;
     }
 
-    void viewLogs(){
+    void DailyLog:: viewLogs(){
         cout<<"Date: "<<this->date<<endl;
         cout<<"Name | Serving size | Calories"<<endl;
         for(auto i: this->logs){
@@ -68,10 +62,10 @@ class DailyLog{
         cout<<endl;
     }
 
-    int updateLog(string oldname, log_t newlog){
+    int DailyLog:: updateLog(string oldname, log_t newlog , int& servings , float& calories){
         auto it = this->logs.begin();
         bool exists = false;
-        for(it ; it != this->logs.end(); it++){
+        for(; it != this->logs.end(); it++){
             if(it->first == oldname){
                 exists = true;
                 break;
@@ -82,10 +76,10 @@ class DailyLog{
         }
         // Now we have to update the log
         // Save the old log onto the undo stack
+        servings = it->second.first;
+        calories = it->second.second;
         *it = newlog;
         return 0;
     }
 
 
-
-};

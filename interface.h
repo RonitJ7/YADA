@@ -10,6 +10,7 @@
 #include "Food.h"
 #include "DailyLog.h"
 #include "profile.h"
+#include "Reverse.h"
 
 #define endl '\n'
 using namespace std;
@@ -18,6 +19,7 @@ class Interface{
     map<string, DailyLog> dailyLogs;
     map<string , int> updates;
     map<string , bool> deleteFile;
+    vector<Reverse> undostack;
 
     public:
     Profile p;
@@ -41,6 +43,9 @@ class Interface{
     void updatelog(string date , string oldname , string newname , int servings , float calories);
     void saveData();
     void undo();
+    void update_r(string date , string oldname , string newname , int servings , float calories);
+    void delete_r(string date , string name , int servings , float calories); ;
+    void add_r(string date , string name , int servings , float calories);
 };
 
 #endif

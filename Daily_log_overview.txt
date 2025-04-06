@@ -10,16 +10,6 @@ Implementation Design:
 -Daily Logs and Undo Commands: 
 1. On one line there will be the date written in the following way : '<<Date>>: <YYYY-MM-DD>'
 
-2. Starting from the new line there will be the logs . After the last log there will be two new lines , and the new date will start from the third.
-Eg: Date: <date>
-    Log1
-    Log2
-    .
-    .
-    .Logn
-
-    Date: <new_date>
-
 3. Logs will be of the format <Food_Name | Servings | Calories_intake |>
 
 4. Undo commands will be implemented by pushing the reverse command of the command which made changes to the system by pushing onto the undo stack.

@@ -7,11 +7,6 @@ using namespace std;
 void get_date(string& date_str) {
     // String is of the form : <<Date>> DD-MM-YYYY
     // Get the date from the string
-    int i = 0;
-    while (date_str[i] != ' ' && date_str[i] != '\0') {
-        i++;
-    }
-    date_str = date_str.substr(i+1 , date_str.size() - i);
     // Now we have date_str = DD-MM-YYYY
 }
 
@@ -63,7 +58,7 @@ void CreateFile(const string& filename) {
     file.close();
 }
 
-float getfoodbyname(string& name , vector<sfood> const & simpleFood , vector<cfood> const & complexFood) {
+float getfoodbyname(string name , vector<sfood>& simpleFood , vector<cfood>& complexFood) {
     // String is of the form: Name
     // Search in simple foods first
     for (auto i : simpleFood) {
@@ -78,5 +73,14 @@ float getfoodbyname(string& name , vector<sfood> const & simpleFood , vector<cfo
         }
     }
     return -1.0f;
+}
+
+string get_current_date() {
+    time_t now = time(nullptr);
+    tm* local_tm = localtime(&now);
+
+    ostringstream oss;
+    oss << put_time(local_tm, "%Y-%m-%d");
+    return oss.str();
 }
 
