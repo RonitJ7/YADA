@@ -9,5 +9,7 @@
 #define MAGENTA "\033[35m"
 #define CYAN    "\033[36m"
 #define RESET   "\033[0m"
+// Sample example usage:
+// cout << RED << "This text is red." << RESET << endl;
 
-#endif // COLORS_H
+#endif 
