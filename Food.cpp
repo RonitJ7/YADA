@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include "Food.h"
+#include "colors.h"
 #define endl '\n'
 using namespace std;
 
@@ -18,10 +19,10 @@ using namespace std;
         this->type = SIMPLE;
     }
     void sfood:: print(){
-        cout<<"ID:"<<id<<'\n';
-        cout<<"Name:"<<name<<endl;
-        cout<<"Calories:"<<calories<<endl;
-        cout<<"Serving size:"<<servingSize<<"\n\n";
+        cout<< RED << "ID:" << RESET << id<<'\n';
+        cout<< GREEN << "Name:" << RESET << name<<endl;
+        cout<< YELLOW << "Calories:" << RESET << calories<<endl;
+        cout<< BLUE << "Serving size:" << RESET << servingSize<<"\n\n";
     }
     void sfood:: writeToFile(ofstream &fout){
         fout<<id<<' '<<name<<' '<<calories<<' '<<no_keywords<<' ';
@@ -40,14 +41,14 @@ using namespace std;
         this->type = COMPLEX;
     }
     void cfood:: printc(){
-        cout<<"ID:"<<id<<'\n';
-        cout<<"Name:"<<name<<endl;
-        cout<<"Calories:"<<calories<<endl;
-        cout<<"Serving size:"<<servingSize<<endl;
+        cout<< RED << "ID:" << RESET << id<<'\n';
+        cout<< GREEN << "Name:" << RESET << name<<endl;
+        cout<< YELLOW << "Calories:" << RESET << calories<<endl;
+        cout<< BLUE << "Serving size:" << RESET << servingSize<<endl;
         cout<<"\nIngredients:"<<"\n\n";
         for(auto i:ingredients){
             i.first.print();
-            cout<<"Quantity:"<<i.second<<endl;
+            cout<<"Quantity:"<< i.second<<endl;
         }
         cout<<'\n';
     }

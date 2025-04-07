@@ -11,7 +11,6 @@ using namespace std;
         float age,height,weight;
         int alevel;
         int calcMethod;
-        float targetIntake;
         ifstream fin("Profile.txt");
         fin>>female>>height>>age>>weight>>alevel>>calcMethod;
         fin.close();
@@ -60,8 +59,8 @@ using namespace std;
     
     void Profile:: calculateIntake(){
         switch(calcMethod){
-            case 1: targetIntake =  Mifflin_St_Jeor(); break;
-            case 2: targetIntake =  Harris_Benedict();
+            case 1: this->targetIntake =  Mifflin_St_Jeor(); break;
+            case 2: this->targetIntake =  Harris_Benedict();
         }
     }
 

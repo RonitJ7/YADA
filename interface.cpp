@@ -421,7 +421,7 @@ using namespace std;
         DailyLog* d = get_inst(date);
         int servings_old;
         float calories_old;
-        int ret = d->updateLog(oldname , newlog , servings_old , calories_old);
+        d->updateLog(oldname , newlog , servings_old , calories_old);
         updates[date] -= 1;
         return ;
     }
