@@ -21,6 +21,8 @@ Ronit Jalihal: Profile, Food<br>
 Shreyas Kasture: Daily Log<br>
 Both: Documentation<br>
 
+## Class Diagram
+![alt text](class.png)
 ## Sequence Diagrams
 ### Food functionalities: Add and Search
 ![alt text](food.png)
@@ -34,6 +36,21 @@ Both: Documentation<br>
 ### Undo Functionality
 ![alt text](undo.png)
 
+## Core design principles
+### Low Coupling:
+Each module (Profile, Food, Daily Log, Undo) is implemented as a self-contained unit with well-defined interfaces. For example, the Profile class manages user data and intake calculation independently of how food or logs are handled. This isolation minimizes changes in one module affecting others.
+
+### High Cohesion:
+Every module handles a specific responsibility. The Profile class focuses solely on user data and calorie calculations, while the Food component handles food addition and search, and the Daily Log manages log operations. This focused functionality helps maintain internal consistency and clarity.
+
+### Separation of Concerns (SoC):
+The codebase separates different functionalities clearly. Profile manipulation, food management, daily log updates, and undo operations are implemented in separate classes, each responsible for a unique aspect of the system. This separation makes the code more maintainable and easier to understand.
+
+### Information Hiding:
+The implementation details of each module are encapsulated within their respective classes. For instance, the Profile class hides the internal calorie calculation logic (Mifflin_St_Jeor and Harris_Benedict methods) behind a public interface. This prevents external components from relying on internal data representations and methods.
+
+### Law of Demeter (LoD):
+Objects interact with their immediate collaborators only. In the sequence of operations (e.g., when updating the daily log with food information), each module calls methods on directly related objects rather than traversing multiple layers. This neighbor-only communication restricts unnecessary dependencies and coupling.
 
 ## Strengths
 + Scalable: High amount of modularity and independence means it is easily scalable. All 3 key design are covered.
