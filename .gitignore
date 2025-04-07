@@ -1,3 +1,4 @@
 *.out
 .vscode
 Daily_log_overview.txt
+*.o

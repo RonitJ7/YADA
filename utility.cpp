@@ -4,12 +4,6 @@
 using namespace std;
 
 
-void get_date(string& date_str) {
-    // String is of the form : <<Date>> DD-MM-YYYY
-    // Get the date from the string
-    // Now we have date_str = DD-MM-YYYY
-}
-
 log_t get_logs(string& log_str) {
     // String is of the form: Name | Serving size | Calories
     // Get the name from the string

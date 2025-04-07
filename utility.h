@@ -12,7 +12,6 @@
 typedef pair<string , pair<int , float>> log_t;
 using namespace std;
 
-void get_date(string& date_str);
 log_t get_logs(string& log_str);
 bool fileExists(const string& filename);
 void CreateFile(const string& filename);

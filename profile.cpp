@@ -15,7 +15,6 @@ using namespace std;
         ifstream fin("Profile.txt");
         fin>>female>>height>>age>>weight>>alevel>>calcMethod;
         fin.close();
-        // cout<<female<<" "<<height<<" "<<age<<" "<<weight<<" "<<alevel<<'\n';
         this->female = female;
         this->age = age;
         this->height = height;
