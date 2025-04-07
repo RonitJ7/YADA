@@ -296,6 +296,7 @@ using namespace std;
             // Add this to undo_stack
             Reverse r(date , name , servings , calories , 'a');
             undostack.push_back(r);
+            askToSave();
             return;
         }
         DailyLog* d = get_inst(date);
@@ -305,6 +306,7 @@ using namespace std;
         // Add this to undo_stack
         Reverse r(date , name , servings , calories , 'a');
         undostack.push_back(r);
+        askToSave();
         return;
     }
 
@@ -328,9 +330,11 @@ using namespace std;
             deleteFile[date] = true;
             dailyLogs.erase(date);
             updates[date] += 1;
+            askToSave();
             return;
         }
         updates[date] += 1;
+        askToSave();
         return;
     }
 
@@ -374,6 +378,7 @@ using namespace std;
         Reverse r(date , newname , oldname , servings_old , calories_old);
         undostack.push_back(r);
         updates[date] += 1;
+        askToSave();
         return;
     }
 

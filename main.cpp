@@ -68,7 +68,7 @@ signed main()
             int choice = get_choice(1, 8);
             if (choice == 1)
             {
-                cout << "Enter the date(DD-MM-YYYY) \n(Enter the string \"today\" for current day):";
+                cout << "Enter the date(YYYY-MM-DD) \n(Enter the string \"today\" for current day):";
                 cin >> date;
                 if (date == "today")
                 {
@@ -90,7 +90,7 @@ signed main()
             }
             else if (choice == 2)
             {
-                cout << "Enter the date(DD-MM-YYYY)\n(Enter the string \"today\" for current day):";
+                cout << "Enter the date(YYYY-MM-DD)\n(Enter the string \"today\" for current day):";
                 string date;
                 cin >> date;
                 if (date == "today")
@@ -104,7 +104,7 @@ signed main()
             }
             else if (choice == 3)
             {
-                cout << "Enter the date(DD-MM-YYYY)\n(Enter the string \"today\" for current day):";
+                cout << "Enter the date(YYYY-MM-DD)\n(Enter the string \"today\" for current day):";
                 string date;
                 cin >> date;
                 if (date == "today")
@@ -158,7 +158,7 @@ signed main()
             }
             else if (choice == 5)
             {
-                cout << "Enter the date(DD-MM-YYYY)\n(Enter the string \"today\" for current day):";
+                cout << "Enter the date(YYYY-MM-DD)\n(Enter the string \"today\" for current day):";
                 string date;
                 cin >> date;
                 if (date == "today")
@@ -169,7 +169,7 @@ signed main()
             }
             else if (choice == 6)
             {
-                cout << "Enter the date(DD-MM-YYYY) you would like to change the logs for.\n(Enter the string \"today\" for current day):";
+                cout << "Enter the date(YYYY-MM-DD) you would like to change the logs for.\n(Enter the string \"today\" for current day):";
                 string date;
                 cin >> date;
                 if (date == "today")
