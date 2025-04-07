@@ -7,8 +7,6 @@
 #define endl '\n'
 using namespace std;
 
-
-
     sfood:: sfood(int id,string name, float calories, vector<string> keywords, float servingSize){
         this->id = id;
         this->name = name;

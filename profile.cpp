@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include "profile.h"
+#define endl "\n"
 
 using namespace std;
 
