@@ -1,5 +1,11 @@
-0 Cheese 230 2 Dairy Fatty 5.3
-1 Patty 58.2 2 Yeast Carbs 25
-2 Butter 4.82 3 Fatty Dairy Gluton 20
-3 Bread 100.5 2 Carbs Fibre 25
-4 cheese 80 2 fatty dairy 7
+0 Milk 61 3 dairy liquid whole 100
+1 Rice 130 3 grain cooked white 100
+2 Apple 52 3 fruit fresh raw 100
+3 Egg 143 3 protein animal boiled 100
+4 Carrot 41 3 vegetable root raw 100
+5 Cheese 402 3 dairy solid cheddar 100
+6 Chicken 165 3 protein meat grilled 100
+7 Banana 89 3 fruit yellow ripe 100
+8 Patty 58.2 2 Yeast Carbs 25
+9 Butter 4.82 3 Fatty Dairy Gluton 20
+10 Bread 100.5 2 Carbs Fibre 25

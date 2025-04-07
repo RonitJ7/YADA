@@ -1,0 +1,25 @@
+0 Cheese_sandwhich 1005 2 snack fats 2 5 2 10 2 0
+
+1 Ommelete 152.64 2 healthy light 2 3 1 9 2 0
+
+2 Chicken_Sandwich 320.6 4 fastfood protein bread lunch 3 6 1 10 1 9 1 0
+
+3 Veggie_Wrap 215.3 4 healthy vegetarian lunch wrap 3 4 1 2 1 10 1 0
+
+4 Grilled_Cheese 310.1 3 snack cheesy quick 3 5 1 10 1 1 1 0
+
+5 Banana_Smoothie 210.5 4 drink sweet fruity breakfast 3 7 1 0 1 2 1 0
+
+6 Rice_and_Egg 190.1 3 basic budget meal 2 1 1 3 1 0
+
+7 Protein_Salad 240.4 4 healthy protein salad lunch 3 3 1 4 1 6 1 0
+
+8 Cheesy_Omelette 278.2 3 breakfast eggs cheese 2 3 1 5 1 0
+
+9 Apple_Toast 182.3 3 fruit toast snack 2 2 1 10 1 0
+
+10 Chicken_Biryani 375.0 4 spicy rice meat lunch 3 1 1 6 1 9 1 0
+
+11 Banana_Parfait 198.5 3 dessert fruit layered 3 7 1 0 1 2 1 0
+
+12 Buttered_Rice 235.2 3 simple rice buttery 2 1 1 9 1 0
