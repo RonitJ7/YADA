@@ -18,11 +18,11 @@ using namespace std;
         this->servingSize = servingSize;
         this->type = SIMPLE;
     }
-    void sfood:: print(){
-        cout<< RED << "ID:" << RESET << id<<'\n';
-        cout<< GREEN << "Name:" << RESET << name<<endl;
-        cout<< YELLOW << "Calories:" << RESET << calories<<endl;
-        cout<< BLUE << "Serving size:" << RESET << servingSize<<"\n\n";
+    void sfood::print() {
+        cout << RED << "ID:" << id << RESET << '\n';
+        cout << GREEN << "Name:" << name << RESET << endl;
+        cout << YELLOW << "Calories:" << calories << RESET << endl;
+        cout << BLUE << "Serving size(in g):" << servingSize << RESET << "\n\n";
     }
     void sfood:: writeToFile(ofstream &fout){
         fout<<id<<' '<<name<<' '<<calories<<' '<<no_keywords<<' ';
@@ -40,17 +40,17 @@ using namespace std;
         }
         this->type = COMPLEX;
     }
-    void cfood:: printc(){
-        cout<< RED << "ID:" << RESET << id<<'\n';
-        cout<< GREEN << "Name:" << RESET << name<<endl;
-        cout<< YELLOW << "Calories:" << RESET << calories<<endl;
-        cout<< BLUE << "Serving size:" << RESET << servingSize<<endl;
-        cout<<"\nIngredients:"<<"\n\n";
-        for(auto i:ingredients){
+    void cfood::printc() {
+        cout << RED << "ID:" << id << RESET << '\n';
+        cout << GREEN << "Name:" << name << RESET << endl;
+        cout << YELLOW << "Calories:" << calories << RESET << endl;
+        cout << BLUE << "Serving size(in g):" << servingSize << RESET << endl;
+        cout << "\nIngredients:" << "\n\n";
+        for (auto i : ingredients) {
             i.first.print();
-            cout<<"Quantity:"<< i.second<<endl;
+            cout << "Quantity:" << i.second << endl;
         }
-        cout<<'\n';
+        cout << '\n';
     }
     void cfood:: writeToFilec(ofstream &fout){
         fout<<id<<' '<<name<<' '<<calories<<' '<<no_keywords<<' ';
